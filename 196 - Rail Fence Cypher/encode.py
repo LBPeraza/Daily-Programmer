@@ -1,17 +1,10 @@
-def interleave(a, b):
-    if (a == "" or b == ""): return a + b
-    return a[0] + b[0] + interleave(a[1:], b[1:])
-
-def encode(height, plain, depth=1, atTop=True):
-    # top line of pattern
-    print depth
-    if atTop:
-        top = plain[::(height-1)*2]
-    elif depth == height:
-        return plain[height-1::(height-1)*2]
-    else:
-        left = plain[depth-1::height+1]
-        right = plain[depth-1+2*(height-depth)::height+1]
-        print right
-        top = interleave(left, right)
-    return top + encode(height, plain, depth+1, False)
+def encode(height, plain):
+    lines = ["" for _ in range(height)]
+    depth = 0
+    inc = True
+    for c in plain:
+        lines[depth] += c
+        depth += 1 if inc else -1
+        if (depth == height - 1): inc = False
+        if (depth == 0): inc = True
+    return "".join(lines)
